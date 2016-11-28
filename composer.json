@@ -1,0 +1,25 @@
+{
+    "name": "delboy1978uk/proxy-generator",
+    "description": "Use your own interfaces by generating wrapper classes.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Derek McLean",
+            "email": "delboy1978uk@gmail.com"
+        }
+    ],
+    "require": {
+        "league/flysystem": "^1.0",
+        "symfony/console": "^3.1"
+    },
+    "require-dev":{
+        "codeception/codeception":"dev-master",
+        "zendframework/zend-filter": "^2.7"
+    },
+    "autoload":{
+        "psr-4":{
+            "Del\\ProxyGenerator\\":"src/",
+            "DelTesting\\ProxyGenerator\\":"tests/unit/Del/"
+        }
+    }
+}
