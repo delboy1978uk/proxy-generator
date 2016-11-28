@@ -53,15 +53,11 @@ class ProxyGenerator extends Command
         $svc->setReplaceInterface($replaceInterface);
         $svc->setTargetNamespace($targetNamespace);
         $svc->setReplaceNamespace($replaceNamespace);
-
-        try {
-            $classes = $svc->generate();
-            $output->writeln('Classes generated in '.$targetDirectory);
-            foreach ($classes as $class) {
-                $output->writeln('Generated '.$class.'.');
-            }
-        } catch (Exception $e) {
-            $output->writeln('Error. '.$e->getMessage());
+        
+        $classes = $svc->generate();
+        $output->writeln('Classes generated in '.$targetDirectory);
+        foreach ($classes as $class) {
+            $output->writeln('Generated '.$class.'.');
         }
     }
 }

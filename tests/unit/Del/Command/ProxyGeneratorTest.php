@@ -54,15 +54,6 @@ class ProxyGeneratorTest extends CommandTest
             'replaceNamespace' => 'My\Awesome\Filter',
         ]);
         $this->assertContains('Classes generated in tests/_output/generation'."\n",$output);
-    }/**
- * Check tests are working
- */
-    public function testGenerateCatchesException()
-    {
-        $command = new ProxyGenerator('.');
-        $output = $this->runCommand($command, []);
-        $this->assertContains('Not enough arguments (missing: "scanInterface, replaceInterface, scanDirectory, targetNamespace, replaceNamespace")',$output);
     }
-
 
 }
