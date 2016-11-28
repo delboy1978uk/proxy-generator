@@ -62,7 +62,6 @@ class ProxyGenerator extends Command
             }
         } catch (Exception $e) {
             $output->writeln('Error. '.$e->getMessage());
-            throw $e;
         }
     }
 }

@@ -57,7 +57,7 @@ class ProxyGeneratorTest extends CommandTest
     }/**
  * Check tests are working
  */
-    public function testGenerateCatchesExcption()
+    public function testGenerateCatchesException()
     {
         $command = new ProxyGenerator('.');
         $output = $this->runCommand($command, []);
