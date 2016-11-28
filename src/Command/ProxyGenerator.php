@@ -57,6 +57,9 @@ class ProxyGenerator extends Command
         try {
             $classes = $svc->generate();
             $output->writeln('Classes generated in '.$targetDirectory);
+            foreach ($classes as $class) {
+                $output->writeln('Generated '.$class.'.');
+            }
         } catch (Exception $e) {
             $output->writeln('Error. '.$e->getMessage());
             throw $e;

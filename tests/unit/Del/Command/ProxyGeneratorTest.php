@@ -53,7 +53,7 @@ class ProxyGeneratorTest extends CommandTest
             'targetNamespace' => 'Zend\Filter',
             'replaceNamespace' => 'My\Awesome\Filter',
         ]);
-        $this->assertEquals('Classes generated in tests/_output/generation'."\n",$output);
+        $this->assertContains('Classes generated in tests/_output/generation'."\n",$output);
     }
 
 

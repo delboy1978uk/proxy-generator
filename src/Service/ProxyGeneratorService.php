@@ -63,13 +63,13 @@ HERE;
     /** @var array $currentFile */
     private $currentFile;
 
-    /** @var array $currentNamespace */
+    /** @var string $currentNamespace */
     private $currentNamespace;
 
     /** @var string $checkClass  */
     private $checkClass;
 
-    private $newMatches = 0;
+    private $newMatches = false;
 
     private $baseNamespace;
 
@@ -177,24 +177,24 @@ HERE;
             $this->processFile($file);
         }
         $this->type = self::PROCESS_CHILD_CLASSES;
-        foreach ($this->implementingClasses as $class) {
+        $this->processClasses($this->implementingClasses, $contents);
+        do {
+            $this->newMatches = false;
+            $this->processClasses($this->extendingClasses, $contents);
+            $keepGoing = $this->newMatches;
+        } while ($keepGoing === true);
+
+        return array_merge($this->implementingClasses, $this->extendingClasses);
+    }
+
+    private function processClasses($classes, $contents)
+    {
+        foreach ($classes as $class) {
             $this->checkClass = $class['class'];
             foreach($contents as $file) {
                 $this->processFile($file);
             }
         }
-        do {
-            $this->newMatches = false;
-            foreach ($this->extendingClasses as $class) {
-                $this->checkClass = $class['class'];
-                foreach($contents as $file) {
-                    $this->processFile($file);
-                }
-            }
-            $keepGoing = $this->newMatches;
-        } while ($keepGoing === true);
-
-        return array_merge($this->implementingClasses, $this->extendingClasses);
     }
 
     /**
@@ -235,7 +235,7 @@ HERE;
                 $this->processExtendingClass($match);
                 break;
             case self::PROCESS_INTERFACES:
-            default;
+            default:
                 $this->processImplementingClass($match);
                 break;
         }

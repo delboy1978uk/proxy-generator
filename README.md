@@ -1,26 +1,54 @@
 # proxy-generator
 [![Build Status](https://travis-ci.org/delboy1978uk/proxy-generator.png?branch=master)](https://travis-ci.org/delboy1978uk/proxy-generator) [![Code Coverage](https://scrutinizer-ci.com/g/delboy1978uk/proxy-generator/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/delboy1978uk/proxy-generator/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/delboy1978uk/proxy-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/delboy1978uk/proxy-generator/?branch=master) <br />
-a proxy-generator PHP setup for writing a new Github project with Composer and Packagist complete with travis builds and scrutinizer code coverage & quality analysis
-##Usage
-Simply clone this repository, delete the .git folder, tweak the composer.json, and do a couple of (case sensitive) find and replaces:
-```
-proxy-generator
-proxyGenerator
-Del
-delboy1978uk
-```
+A Proxy generator for getting third party libraries to implement your interface. Just tell it what Interface you wish to 
+replace, and it will search through, and generate your own class extending it but implementing your own interface.
+##Example
+Replacing Some\Symfony\Lib\SomeInterface with My\Awesome\Lib\SomeInterface will result in this before and after:
+####Before
+```php
+<?php
 
-Rename the following files/folders:
+namespace Some\Symfony\Lib;
+
+class UsefulClass implements SomeInterface 
+{
+    // etc
+}
 ```
-src/proxyGenerator.php
-tests/unit/Del/
-tests/unit/Del/proxyGeneratorTest.php
+####After
+```php
+<?php
+
+namespace My\Awesome\Lib;
+
+use Some\Symfony\Lib\UsefulClass as ThirdPartyUsefulClass;
+
+class UsefulClass extends ThirdPartyUsefulClass implements SomeInterface 
+{
+}
 ```
-Finally, add your repository on Travis CI and Scrutinizer, then commit and push to your Github repository.
-Now Github has a commit with a composer.json, head over to Packagist and submit your repository.
-###Note about tests
-Tests are done using the awesome Codeception! Run tests from the root folder by typing:
+For each class implementing the interface, we recursively iterate over the vendor classes and generate any classes 
+extending them. These classes will also implement our interface. 
+```php
+<?php
+
+namespace My\Awesome\Lib\Number;
+
+use Some\Symfony\Lib\Number\UsefulNuberClass as ThirdPartyUsefulNumberClass;
+use My\Awesome\Lib\SomeInterface;
+
+class UsefulClass extends ThirdPartyUsefulNumberClass implements SomeInterface 
+{
+}
 ```
-vendor/bin/codecept run unit
+##Installation
+Install using composer
 ```
-Tests will push to your Travis branch, which will push code coverage to scrutinizer. Now you can start making tests and not worry about setup.
+$ composer require delboy1978uk/proxy-generator
+```
+##Usage
+You can use Del\ProxyGenerator\Service\ProxyGeneratorService if doing it programatically, or you can use the CLI command bin/proxy-generator.
+```
+$ cd bin
+$ ./proxy-generator 'VendorInterface' 'YourInterface' look/in/this/folder 'BaseVendorNamespace', 'YourBaseNamespace', 'relative/path/to/genarate', '/absolute/project/root/basedir'
+```
